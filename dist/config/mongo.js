@@ -8,10 +8,10 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const connectDB = async () => {
     try {
-        if (!process.env.MONGO_URI) {
+        if (!process.env.MONGODB_URI) {
             throw new Error('MONGODB_URI is not defined in .env file');
         }
-        await mongoose_1.default.connect(process.env.MONGO_URI);
+        await mongoose_1.default.connect(process.env.MONGODB_URI);
         console.log('MongoDB Connected');
     }
     catch (err) {

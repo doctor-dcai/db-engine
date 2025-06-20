@@ -6,15 +6,15 @@ import connectDB from '../config/mongo';
 // Load environment variables
 dotenv.config();
 
-const PORT = process.env.PORT || 8000;
+const MONGODB_PORT = process.env.MONGODB_PORT || 8000;
 
 // Database connection and server start
 const startServer = async () => {
   try {
     await connectDB();
     
-    const server = app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
+    const server = app.listen(MONGODB_PORT, () => {
+      console.log(`Server running on http://localhost:${MONGODB_PORT}`);
     });
 
     // Graceful shutdown

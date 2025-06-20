@@ -9,13 +9,13 @@ const app_1 = __importDefault(require("./app"));
 const mongo_1 = __importDefault(require("../config/mongo"));
 // Load environment variables
 dotenv_1.default.config();
-const PORT = process.env.PORT || 8000;
+const MONGODB_PORT = process.env.MONGODB_PORT || 8000;
 // Database connection and server start
 const startServer = async () => {
     try {
         await (0, mongo_1.default)();
-        const server = app_1.default.listen(PORT, () => {
-            console.log(`Server running on http://localhost:${PORT}`);
+        const server = app_1.default.listen(MONGODB_PORT, () => {
+            console.log(`Server running on http://localhost:${MONGODB_PORT}`);
         });
         // Graceful shutdown
         process.on('SIGTERM', () => {
