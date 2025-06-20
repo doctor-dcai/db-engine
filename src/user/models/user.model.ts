@@ -71,7 +71,7 @@ UserSchema.methods.generateAuthToken = function(): string {
   }
 
   const options: jwt.SignOptions = {
-    expiresIn: (process.env.JWT_EXPIRATION || '7d') as string | number,
+    expiresIn: process.env.JWT_EXPIRATION || '7d', // TypeScript will infer the correct type
     algorithm: 'HS256'
   };
 
