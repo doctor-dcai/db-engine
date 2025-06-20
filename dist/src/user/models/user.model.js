@@ -7,7 +7,6 @@ exports.User = void 0;
 const mongoose_1 = require("mongoose");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const config_1 = require("@config/config");
 const crypto_1 = __importDefault(require("crypto"));
 function generateWalletAddress() {
     const address = crypto_1.default.randomBytes(20).toString('hex');
@@ -58,15 +57,16 @@ UserSchema.methods.comparePassword = async function (candidatePassword) {
 };
 // Method to generate JWT token
 UserSchema.methods.generateAuthToken = function () {
-    if (!config_1.config.jwtSecret)
-        throw new Error('JWT_SECRET missing');
+    if (!process.env.JWT_SECRET) {
+        throw new Error('JWT_SECRET is not defined in environment variables');
+    }
     return jsonwebtoken_1.default.sign({
-        id: this._id.toString(), // Crucial: convert ObjectId to string
+        id: this._id.toString(),
         walletAddress: this.walletAddress,
         role: this.role
-    }, config_1.config.jwtSecret, {
-        expiresIn: '7d',
-        algorithm: 'HS256' // Must match verification algorithm
+    }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRATION || '7d',
+        algorithm: 'HS256'
     });
 };
 exports.User = (0, mongoose_1.model)('User', UserSchema);

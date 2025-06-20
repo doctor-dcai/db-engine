@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.medicalLogService = exports.MedicalLogService = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const medicalLog_model_1 = require("../models/medicalLog.model");
-const patientProfile_model_1 = require("src/patient/models/patientProfile.model");
-const sessionLog_model_1 = require("src/sessionLog/models/sessionLog.model");
+const patientProfile_model_1 = require("../../patient/models/patientProfile.model");
+const sessionLog_model_1 = require("../../sessionLog/models/sessionLog.model");
 class MedicalLogService {
     async createMedicalLog(patientProfileData, sessionLogData = [], summary) {
         try {

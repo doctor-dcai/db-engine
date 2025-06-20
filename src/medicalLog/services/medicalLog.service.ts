@@ -1,7 +1,7 @@
 import mongoose, { Types } from 'mongoose';
 import { IMedicalLog, MedicalLog } from '../models/medicalLog.model';
-import { IPatientProfile, PatientProfile } from 'src/patient/models/patientProfile.model';
-import { ISessionLog, SessionLog } from 'src/sessionLog/models/sessionLog.model';
+import { IPatientProfile, PatientProfile } from '../../patient/models/patientProfile.model';
+import { ISessionLog, SessionLog } from '../../sessionLog/models/sessionLog.model';
 
 export class MedicalLogService {
   async createMedicalLog(

@@ -1,5 +1,5 @@
 import express from 'express';
-import { authMiddleware } from 'src/user/middlewares/auth.middleware';
+import { authMiddleware } from '../../user/middlewares/auth.middleware';
 import { patientProfileController } from '../controllers/patientProfile.controller';
 
 const router = express.Router();

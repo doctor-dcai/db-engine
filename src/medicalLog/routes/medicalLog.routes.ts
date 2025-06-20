@@ -1,6 +1,6 @@
 import express from 'express';
 import { medicalLogController } from '../controllers/medicalLog.controller';
-import { authMiddleware } from 'src/user/middlewares/auth.middleware';
+import { authMiddleware } from '../../user/middlewares/auth.middleware';
 
 const router = express.Router();
 

@@ -1,7 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { config } from '@config/config';
 import crypto from 'crypto';
 
 export interface IUser extends Document {
@@ -67,18 +66,20 @@ UserSchema.methods.comparePassword = async function(candidatePassword: string): 
 
 // Method to generate JWT token
 UserSchema.methods.generateAuthToken = function(): string {
-  if (!config.jwtSecret) throw new Error('JWT_SECRET missing');
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET is not defined in environment variables');
+  }
   
   return jwt.sign(
     {
-      id: this._id.toString(), // Crucial: convert ObjectId to string
+      id: this._id.toString(),
       walletAddress: this.walletAddress,
       role: this.role
     },
-    config.jwtSecret,
+    process.env.JWT_SECRET,
     {
-      expiresIn: '7d',
-      algorithm: 'HS256' // Must match verification algorithm
+      expiresIn: process.env.JWT_EXPIRATION || '7d',
+      algorithm: 'HS256'
     }
   );
 };
