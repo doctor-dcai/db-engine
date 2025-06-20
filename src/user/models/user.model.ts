@@ -1,6 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import crypto from 'crypto';
 
 export interface IUser extends Document {
@@ -8,7 +8,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   walletAddress: string;
-  role: 'admin' | 'user'; 
+  role: 'admin' | 'user';
   comparePassword(candidatePassword: string): Promise<boolean>;
   generateAuthToken(): string;
 }
@@ -53,7 +53,7 @@ const UserSchema = new Schema<IUser>({
 // Hash password before saving
 UserSchema.pre<IUser>('save', async function(next) {
   if (!this.isModified('password')) return next();
-  
+
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();
@@ -70,8 +70,11 @@ UserSchema.methods.generateAuthToken = function(): string {
     throw new Error('JWT_SECRET is not defined in environment variables');
   }
 
-  const options: jwt.SignOptions = {
-    expiresIn: process.env.JWT_EXPIRATION || '7d', // TypeScript will infer the correct type
+  // Use SignOptions['expiresIn'] type to ensure compatibility
+  const expiresIn = (process.env.JWT_EXPIRATION ?? '7d') as SignOptions['expiresIn'];
+
+  const options: SignOptions = {
+    expiresIn,
     algorithm: 'HS256'
   };
 
