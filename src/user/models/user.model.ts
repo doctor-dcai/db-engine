@@ -69,18 +69,24 @@ UserSchema.methods.generateAuthToken = function(): string {
   if (!process.env.JWT_SECRET) {
     throw new Error('JWT_SECRET is not defined in environment variables');
   }
-  
+
+  // Explicitly type the payload
+  const payload = {
+    id: this._id.toString(),
+    walletAddress: this.walletAddress,
+    role: this.role
+  };
+
+  // Create proper options object
+  const options: jwt.SignOptions = {
+    expiresIn: process.env.JWT_EXPIRATION || '7d',
+    algorithm: 'HS256'
+  };
+
   return jwt.sign(
-    {
-      id: this._id.toString(),
-      walletAddress: this.walletAddress,
-      role: this.role
-    },
+    payload,
     process.env.JWT_SECRET,
-    {
-      expiresIn: process.env.JWT_EXPIRATION || '7d',
-      algorithm: 'HS256'
-    }
+    options
   );
 };
 
