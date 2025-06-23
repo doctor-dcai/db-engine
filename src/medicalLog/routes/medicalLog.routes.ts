@@ -11,6 +11,6 @@ router.use(authMiddleware);
 router.post('/submit', medicalLogController.createMedicalLog);
 router.get('/:medicalLogId', medicalLogController.getMedicalLog);
 router.get('/patient/:walletAddress', medicalLogController.getMedicalLogsByPatient);
-router.post('/:medicalLogId/session-logs', medicalLogController.addSessionLog);
+router.post('/:medicalLogId/session-logs', medicalLogController.addLog);
 
 export default router;

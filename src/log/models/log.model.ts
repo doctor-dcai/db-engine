@@ -1,12 +1,12 @@
 import { Document, Schema, model } from 'mongoose';
 
-export interface ISessionLog extends Document {
+export interface ILog extends Document {
   medicalLogRef: Schema.Types.ObjectId;
   data: any; // Flexible data field
   timestamp?: Date;
 }
 
-const SessionLogSchema = new Schema<ISessionLog>({
+const LogSchema = new Schema<ILog>({
   medicalLogRef: {
     type: Schema.Types.ObjectId,
     ref: 'MedicalLog',
@@ -23,4 +23,4 @@ const SessionLogSchema = new Schema<ISessionLog>({
   }
 }, { timestamps: true });
 
-export const SessionLog = model<ISessionLog>('SessionLog', SessionLogSchema);
+export const Log = model<ILog>('Log', LogSchema);

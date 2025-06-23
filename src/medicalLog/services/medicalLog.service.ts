@@ -1,17 +1,17 @@
 import mongoose, { Types } from 'mongoose';
 import { IMedicalLog, MedicalLog } from '../models/medicalLog.model';
 import { IPatientProfile, PatientProfile } from '../../patient/models/patientProfile.model';
-import { ISessionLog, SessionLog } from '../../sessionLog/models/sessionLog.model';
+import { ILog, Log } from 'src/log/models/log.model';
 
 export class MedicalLogService {
   async createMedicalLog(
     patientProfileData: IPatientProfile,
-    sessionLogData: any[] = [],
+    logData: any[] = [],
     summary?: string
   ): Promise<{
     medicalLog: IMedicalLog;
     patientProfile: IPatientProfile;
-    sessionLogs: ISessionLog[];
+    logs: ILog[];
   }> {
     try {
       // Validate wallet address
@@ -39,9 +39,9 @@ export class MedicalLogService {
       });
 
       // Create session logs with proper typing
-      const sessionLogs = await Promise.all(
-        sessionLogData.map(log => 
-          SessionLog.create({
+      const logs = await Promise.all(
+        logData.map(log => 
+            Log.create({
             medicalLogRef: medicalLog._id,
             data: log,
             timestamp: log.timestamp || new Date()
@@ -50,13 +50,13 @@ export class MedicalLogService {
       );
 
       // Link session logs to the medical log
-      medicalLog.sessionLogRefs = sessionLogs.map(log => log._id) as Types.ObjectId[];
+      medicalLog.logRefs = logs.map(log => log._id) as Types.ObjectId[];
       await medicalLog.save();
 
       return {
         medicalLog,
         patientProfile,
-        sessionLogs
+        logs
       };
 
     } catch (error) {
@@ -74,7 +74,7 @@ export class MedicalLogService {
 
     return MedicalLog.find({ walletAddress })
       .populate('patientProfileRef')
-      .populate('sessionLogRefs') // Optional: populate session logs
+      .populate('logRefs') // Optional: populate session logs
       .sort({ createdAt: -1 })
       .exec();
   }
@@ -86,7 +86,7 @@ export class MedicalLogService {
 
     return MedicalLog.findById(logId)
       .populate('patientProfileRef')
-      .populate('sessionLogRefs') // Optional
+      .populate('logRefs') // Optional
       .exec();
   }
 }

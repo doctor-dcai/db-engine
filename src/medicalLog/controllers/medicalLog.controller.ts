@@ -5,7 +5,7 @@ import { MedicalLog } from '../models/medicalLog.model';
 export class MedicalLogController {
   async createMedicalLog(req: Request, res: Response) {
     try {
-      const { patientProfile, sessionLog, summary } = req.body;
+      const { patientProfile, log, summary } = req.body;
 
       // Validate required fields
       if (!patientProfile?.walletId) {
@@ -14,7 +14,7 @@ export class MedicalLogController {
 
       const result = await medicalLogService.createMedicalLog(
         patientProfile,
-        sessionLog || [],
+        log || [],
         summary
       );
 
@@ -85,12 +85,12 @@ export class MedicalLogController {
     }
   }
 
-  async addSessionLog(req: Request, res: Response) {
+  async addLog(req: Request, res: Response) {
     try {
       const { medicalLogId } = req.params;
-      const { sessionLog } = req.body;
+      const { log } = req.body;
 
-      if (!sessionLog?.activityType) {
+      if (!log?.activityType) {
         return res.status(400).json({ error: 'Activity type is required' });
       }
 
@@ -98,9 +98,9 @@ export class MedicalLogController {
         medicalLogId,
         {
           $push: {
-            sessionLogs: {
-              ...sessionLog,
-              timestamp: sessionLog.timestamp || new Date()
+            logs: {
+              ...log,
+              timestamp: log.timestamp || new Date()
             }
           }
         },
